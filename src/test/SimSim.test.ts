@@ -72,9 +72,18 @@ describe("ProofOfWork", () => {
   test("validateSolution should throw error for unsupported RandomX algorithm", async () => {
     proofOfWork = new SimSim(difficulty, "randomX");
     const challenge = proofOfWork.generateChallenge();
-    const solution = await proofOfWork.findValidHash(challenge);
-    await expect(
-      proofOfWork.validateSolution(challenge, solution)
-    ).rejects.toThrow("RandomX is not supported yet");
+    await expect(proofOfWork.findValidHash(challenge)).rejects.toThrow(
+      "RandomX is not supported yet"
+    );
+  });
+
+  test("argon2 should return a sensible string on hash", async () => {
+    proofOfWork = new SimSim(difficulty, "Argon2");
+    const input = "testInput";
+    const result = await proofOfWork["hash"](input);
+    expect(result).toBeDefined();
+    expect(result).not.toBe("");
+    expect(typeof result).toBe("string");
+    expect(result.length).toBeGreaterThan(0);
   });
 });

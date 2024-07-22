@@ -1,5 +1,5 @@
 import { createHash } from "crypto";
-import Argon2 from "argon2";
+import { argon2id } from "hash-wasm";
 
 export type HashingAlgorithm = "sha256" | "randomX" | "Argon2";
 
@@ -35,19 +35,28 @@ export class SimSim {
       case "randomX":
         throw new Error("RandomX is not supported yet");
       case "Argon2":
-        return Argon2.hash(input);
+        const result = await argon2id({
+          password: input,
+          salt: "somesalt",
+          iterations: 256,
+          parallelism: 1,
+          memorySize: 512,
+          hashLength: 32,
+          outputType: "hex",
+        });
+        return result;
       default:
         throw new Error("Invalid hashing algorithm");
     }
   }
 
   public async findValidHash(challenge: string): Promise<string> {
-    let solution = "";
+    let nonce = "";
     let hash = "";
     do {
-      solution = Math.random().toString(36).substring(2, 15);
-      hash = await this.hash(challenge + solution);
+      nonce = Math.random().toString(36).substring(2, 15);
+      hash = await this.hash(challenge + nonce);
     } while (!hash.startsWith("0".repeat(this.difficulty)));
-    return solution;
+    return nonce;
   }
 }
