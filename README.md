@@ -1,6 +1,6 @@
 # Simsim
 
-Simsim is a versatile proof-of-work (PoW) library designed to validate that a machine has completed a specified unit of work. It supports multiple PoW algorithms, including RandomX, Argon2, and more, making it suitable for a variety of applications requiring computational proof.
+SimSim is a versatile proof-of-work (PoW) library designed to validate that a machine has completed a specified unit of work. It supports multiple PoW algorithms, including RandomX, Argon2, and more, making it suitable for a variety of applications requiring computational proof.
 
 ## Features
 
